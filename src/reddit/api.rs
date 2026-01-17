@@ -41,12 +41,14 @@ pub async fn get_subreddit_top_posts(
 ) -> Result<Vec<Post>> {
     info!("getting top posts for /r/{subreddit} limit={limit} time={time:?}");
     let url = get_base_url()
-        .join(&format!("/r/{subreddit}/top.json"))
+        .join(&format!("/r/{subreddit}/.json"))
         .unwrap();
+
     let client = get_client().build()?;
     let res = client
         .get(url)
         .query(&[
+            ("sort", "top"),
             ("limit", &limit.to_string()),
             ("t", &format!("{:?}", time).to_lowercase()),
         ])
